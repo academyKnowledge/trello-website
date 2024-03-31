@@ -25,12 +25,16 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('loginToTrello',()=>{
+  cy.intercept("https://trello.com/1/resources/templates/categories")
+  .as("loginResponse")
   cy.visit("/login");
   cy.get("#user").type("razanbalatiah96@gmail.com");
   cy.get("#login").click();
   cy.origin("https://id.atlassian.com",()=>{
     cy.get("#password").type("qa!@#$%^&*" +"{enter}")
   })
+  cy.wait("@loginResponse")
+  // cy.wait(3000)
 })
 
 Cypress.Commands.add('findByTestId',(testId)=>{
